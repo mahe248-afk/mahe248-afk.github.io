@@ -25,5 +25,18 @@
         Desconnectar
     </button>
 
+    <script>
+        function onSignIn() {
+            document.getElementById('boto-sortir').style.display = 'block';
+            document.querySelector('.g_id_signin').style.display = 'none';
+        }
+
+        function signOut() {
+            document.getElementById('boto-sortir').style.display = 'none';
+            document.querySelector('.g_id_signin').style.display = 'block';
+        }
+    </script>
+
 </body>
 </html>
+
