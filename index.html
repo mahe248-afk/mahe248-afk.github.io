@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,18 +25,31 @@
         Desconnectar
     </button>
 
+    <h2 id="missatge-benvinguda" style="display:none;">
+        Missatge de benvinguda
+    </h2>
+
     <script>
         function onSignIn(response) {
             var id_token = response.credential;
             console.log("ID Token: " + id_token);
 
+            const dades = JSON.parse(decodeURIComponent(escape(atob(
+                id_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
+            ))));
+
             document.getElementById('boto-sortir').style.display = 'block';
             document.querySelector('.g_id_signin').style.display = 'none';
+
+            const missatge = document.getElementById('missatge-benvinguda');
+            missatge.textContent = 'Benvingut/da, ' + dades.name;
+            missatge.style.display = 'block';
         }
 
         function signOut() {
             document.getElementById('boto-sortir').style.display = 'none';
             document.querySelector('.g_id_signin').style.display = 'block';
+            document.getElementById('missatge-benvinguda').style.display = 'none';
         }
     </script>
 
