@@ -1,33 +1,273 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In | Secure Access</title>
+
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <meta name="google-signin-client_id" content="794763075111-botkrjooedtv1e7ksudd6mdull1o8b56.apps.googleusercontent.com">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #ffffff;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(0, 225, 255, 0.15), transparent 35%),
+                radial-gradient(circle at 85% 80%, rgba(125, 60, 255, 0.18), transparent 35%),
+                linear-gradient(135deg, #050816, #0b1026 55%, #080b19);
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.22;
+            z-index: -1;
+            animation: glow 8s ease-in-out infinite alternate;
+        }
+
+        body::before {
+            background: #00d9ff;
+            top: -120px;
+            left: -100px;
+        }
+
+        body::after {
+            background: #854dff;
+            bottom: -130px;
+            right: -100px;
+            animation-delay: 2s;
+        }
+
+        @keyframes glow {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+            to {
+                transform: translate(40px, 30px) scale(1.2);
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 570px;
+            padding: 55px 45px;
+            text-align: center;
+            border: 1px solid rgba(120, 220, 255, 0.2);
+            border-radius: 25px;
+            background: rgba(15, 23, 48, 0.78);
+            backdrop-filter: blur(20px);
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, 0.5),
+                0 0 35px rgba(0, 200, 255, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            animation: appear 0.8s ease-out;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 22px;
+            font-size: 34px;
+            color: #ffffff;
+            background: linear-gradient(135deg, #00c6ff, #7657ff);
+            box-shadow: 0 0 35px rgba(0, 198, 255, 0.35);
+        }
+
+        .status {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 7px 15px;
+            border: 1px solid rgba(0, 255, 190, 0.3);
+            border-radius: 30px;
+            color: #63f5c4;
+            background: rgba(0, 255, 190, 0.07);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            font-size: clamp(28px, 6vw, 39px);
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #ffffff, #77eaff, #a78bfa);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            margin-bottom: 35px;
+            color: #aab6d3;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .separator {
+            width: 65px;
+            height: 3px;
+            margin: 0 auto 35px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #00d9ff, #875cff);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.5);
+        }
+
+        .login-area {
+            min-height: 55px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .g_id_signin {
+            display: flex;
+            justify-content: center;
+        }
+
+        #boto-sortir {
+            display: none;
+            margin: 0 auto;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            background: linear-gradient(110deg, #087fbd, #7657ff);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 160, 255, 0.25);
+            transition: 0.3s ease;
+        }
+
+        #boto-sortir:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 190, 255, 0.4);
+        }
+
+        #missatge-benvinguda {
+            display: none;
+            margin: 25px 0;
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 190, 0.25);
+            border-radius: 15px;
+            color: #72f5c8;
+            background: rgba(0, 255, 190, 0.07);
+            font-size: 20px;
+            animation: appear 0.5s ease-out;
+        }
+
+        .security-info {
+            margin-top: 35px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255, 255, 255, 0.09);
+            color: #71809f;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .security-info span {
+            color: #55e8c0;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 40px 22px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-    <div
-        id="g_id_onload"
-        data-client_id="794763075111-botkrjooedtv1e7ksudd6mdull1o8b56.apps.googleusercontent.com"
-        data-callback="onSignIn">
+    <div class="container">
+
+        <div class="logo">✦</div>
+
+        <div class="status">● SECURE AUTHENTICATION</div>
+
+        <h1>Welcome Back</h1>
+
+        <p class="subtitle">
+            Accedeix al teu espai personal mitjançant
+            l'autenticació segura de Google.
+        </p>
+
+        <div class="separator"></div>
+
+        <div
+            id="g_id_onload"
+            data-client_id="794763075111-botkrjooedtv1e7ksudd6mdull1o8b56.apps.googleusercontent.com"
+            data-callback="onSignIn">
+        </div>
+
+        <div class="login-area">
+            <div
+                class="g_id_signin"
+                data-type="standard"
+                data-size="large"
+                data-theme="filled_blue"
+                data-text="signin_with"
+                data-shape="rectangular">
+            </div>
+        </div>
+
+        <button
+            id="boto-sortir"
+            onclick="signOut()">
+            Desconnectar
+        </button>
+
+        <h2 id="missatge-benvinguda">
+            Missatge de benvinguda
+        </h2>
+
+        <div class="security-info">
+            <span>●</span> CONNECTION SECURED
+            <br><br>
+            GOOGLE IDENTITY SERVICES
+        </div>
+
     </div>
-
-    <div
-        class="g_id_signin"
-        data-type="standard">
-    </div>
-
-    <button
-        id="boto-sortir"
-        style="display:none;"
-        onclick="signOut()">
-        Desconnectar
-    </button>
-
-    <h2 id="missatge-benvinguda" style="display:none;">
-        Missatge de benvinguda
-    </h2>
 
     <script>
         function onSignIn(response) {
@@ -48,7 +288,7 @@
 
         function signOut() {
             document.getElementById('boto-sortir').style.display = 'none';
-            document.querySelector('.g_id_signin').style.display = 'block';
+            document.querySelector('.g_id_signin').style.display = 'flex';
             document.getElementById('missatge-benvinguda').style.display = 'none';
         }
     </script>
